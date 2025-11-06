@@ -14,7 +14,74 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      favorites: {
+        Row: {
+          created_at: string
+          id: string
+          product_currency: string | null
+          product_handle: string
+          product_id: string
+          product_image_url: string | null
+          product_price: string | null
+          product_title: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          product_currency?: string | null
+          product_handle: string
+          product_id: string
+          product_image_url?: string | null
+          product_price?: string | null
+          product_title: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          product_currency?: string | null
+          product_handle?: string
+          product_id?: string
+          product_image_url?: string | null
+          product_price?: string | null
+          product_title?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "favorites_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          email: string
+          full_name: string | null
+          id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          full_name?: string | null
+          id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          full_name?: string | null
+          id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

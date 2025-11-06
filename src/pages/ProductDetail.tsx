@@ -1,16 +1,19 @@
 import { useParams, Link } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { fetchProducts } from "@/lib/shopify";
+import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { CartDrawer } from "@/components/CartDrawer";
-import { ArrowLeft, ShoppingCart, Loader2 } from "lucide-react";
+import { Header } from "@/components/Header";
+import { useAuth } from "@/hooks/useAuth";
+import { ArrowLeft, ShoppingCart, Loader2, Heart } from "lucide-react";
 import { useCartStore } from "@/stores/cartStore";
 import { toast } from "sonner";
 import { useState } from "react";
-import logoImage from "@/assets/zarista-logo.jpg";
 
 const ProductDetail = () => {
   const { handle } = useParams();
+  const { user } = useAuth();
+  const queryClient = useQueryClient();
   const addItem = useCartStore(state => state.addItem);
   const [selectedVariantIndex, setSelectedVariantIndex] = useState(0);
 
@@ -23,6 +26,59 @@ const ProductDetail = () => {
   const node = product?.node;
   const variants = node?.variants.edges || [];
   const selectedVariant = variants[selectedVariantIndex]?.node;
+
+  const { data: isFavorite, isLoading: favoriteLoading } = useQuery({
+    queryKey: ['favorite', user?.id, node?.id],
+    queryFn: async () => {
+      if (!user || !node) return false;
+      const { data } = await supabase
+        .from('favorites')
+        .select('id')
+        .eq('user_id', user.id)
+        .eq('product_id', node.id)
+        .maybeSingle();
+      return !!data;
+    },
+    enabled: !!user && !!node,
+  });
+
+  const toggleFavoriteMutation = useMutation({
+    mutationFn: async () => {
+      if (!user || !node || !selectedVariant) {
+        throw new Error("Missing required data");
+      }
+
+      if (isFavorite) {
+        const { error } = await supabase
+          .from('favorites')
+          .delete()
+          .eq('user_id', user.id)
+          .eq('product_id', node.id);
+        if (error) throw error;
+      } else {
+        const { error } = await supabase
+          .from('favorites')
+          .insert({
+            user_id: user.id,
+            product_id: node.id,
+            product_handle: node.handle,
+            product_title: node.title,
+            product_image_url: node.images.edges[0]?.node.url || null,
+            product_price: selectedVariant.price.amount,
+            product_currency: selectedVariant.price.currencyCode,
+          });
+        if (error) throw error;
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['favorite'] });
+      queryClient.invalidateQueries({ queryKey: ['favorites'] });
+      toast.success(isFavorite ? "Removed from favorites" : "Added to favorites");
+    },
+    onError: () => {
+      toast.error("Failed to update favorites");
+    },
+  });
 
   const handleAddToCart = () => {
     if (!product || !selectedVariant) return;
@@ -64,16 +120,17 @@ const ProductDetail = () => {
     );
   }
 
+  const handleToggleFavorite = () => {
+    if (!user) {
+      toast.error("Please sign in to save favorites");
+      return;
+    }
+    toggleFavoriteMutation.mutate();
+  };
+
   return (
     <div className="min-h-screen bg-background">
-      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container flex h-16 items-center justify-between">
-          <Link to="/">
-            <img src={logoImage} alt="Zarista" className="h-8 object-contain" />
-          </Link>
-          <CartDrawer />
-        </div>
-      </header>
+      <Header />
 
       <main className="container py-8">
         <Button asChild variant="ghost" className="mb-6">
@@ -132,15 +189,28 @@ const ProductDetail = () => {
               </div>
             )}
 
-            <Button 
-              onClick={handleAddToCart}
-              size="lg"
-              className="w-full gap-2"
-              disabled={!selectedVariant?.availableForSale}
-            >
-              <ShoppingCart className="h-5 w-5" />
-              {selectedVariant?.availableForSale ? 'Add to Cart' : 'Out of Stock'}
-            </Button>
+            <div className="flex gap-2">
+              <Button 
+                onClick={handleAddToCart}
+                size="lg"
+                className="flex-1 gap-2"
+                disabled={!selectedVariant?.availableForSale}
+              >
+                <ShoppingCart className="h-5 w-5" />
+                {selectedVariant?.availableForSale ? 'Add to Cart' : 'Out of Stock'}
+              </Button>
+              
+              <Button
+                onClick={handleToggleFavorite}
+                size="lg"
+                variant="outline"
+                className="gap-2"
+                disabled={favoriteLoading || toggleFavoriteMutation.isPending}
+              >
+                <Heart className={`h-5 w-5 ${isFavorite ? 'fill-current text-primary' : ''}`} />
+                {isFavorite ? 'Saved' : 'Save'}
+              </Button>
+            </div>
           </div>
         </div>
       </main>

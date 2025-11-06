@@ -1,10 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
 import { fetchProducts } from "@/lib/shopify";
 import { ProductCard } from "@/components/ProductCard";
-import { CartDrawer } from "@/components/CartDrawer";
+import { Header } from "@/components/Header";
 import { Loader2 } from "lucide-react";
 import heroImage from "@/assets/hero-jewelry.jpg";
-import logoImage from "@/assets/zarista-logo.jpg";
 
 const Index = () => {
   const { data: products, isLoading, error } = useQuery({
@@ -14,12 +13,7 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container flex h-16 items-center justify-between">
-          <img src={logoImage} alt="Zarista" className="h-8 object-contain" />
-          <CartDrawer />
-        </div>
-      </header>
+      <Header />
 
       <section className="relative h-[70vh] min-h-[500px] overflow-hidden">
         <div className="absolute inset-0">

@@ -13,6 +13,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 
 const Index = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
+  const [selectedMaterial, setSelectedMaterial] = useState<string>("All");
   const [sortBy, setSortBy] = useState<string>("featured");
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -27,15 +28,41 @@ const Index = () => {
     return ["All", ...Array.from(types)];
   }, [products]);
 
+  const materials = useMemo(() => {
+    const materialSet = new Set<string>();
+    products?.forEach(p => {
+      const title = p.node.title.toLowerCase();
+      if (title.includes('gold') || title.includes('rose gold')) materialSet.add('Gold');
+      if (title.includes('silver')) materialSet.add('Silver');
+      if (title.includes('diamond')) materialSet.add('Diamond');
+      if (title.includes('pearl')) materialSet.add('Pearl');
+      if (title.includes('sapphire') || title.includes('emerald')) materialSet.add('Gemstone');
+    });
+    return ["All", ...Array.from(materialSet)];
+  }, [products]);
+
   const filteredProducts = useMemo(() => {
     if (!products) return [];
     
     let filtered = products.filter(product => {
       const matchesCategory = selectedCategory === "All" || product.node.productType === selectedCategory;
+      const title = product.node.title.toLowerCase();
+      
+      // Material filter
+      let matchesMaterial = selectedMaterial === "All";
+      if (!matchesMaterial) {
+        if (selectedMaterial === "Gold" && (title.includes('gold') || title.includes('rose gold'))) matchesMaterial = true;
+        if (selectedMaterial === "Silver" && title.includes('silver')) matchesMaterial = true;
+        if (selectedMaterial === "Diamond" && title.includes('diamond')) matchesMaterial = true;
+        if (selectedMaterial === "Pearl" && title.includes('pearl')) matchesMaterial = true;
+        if (selectedMaterial === "Gemstone" && (title.includes('sapphire') || title.includes('emerald'))) matchesMaterial = true;
+      }
+      
       const matchesSearch = searchQuery === "" || 
-        product.node.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        title.includes(searchQuery.toLowerCase()) ||
         product.node.description?.toLowerCase().includes(searchQuery.toLowerCase());
-      return matchesCategory && matchesSearch;
+      
+      return matchesCategory && matchesMaterial && matchesSearch;
     });
 
     // Sort products
@@ -58,7 +85,7 @@ const Index = () => {
     }
 
     return filtered;
-  }, [products, selectedCategory, sortBy, searchQuery]);
+  }, [products, selectedCategory, selectedMaterial, sortBy, searchQuery]);
 
   return (
     <div className="min-h-screen bg-background">
@@ -123,17 +150,38 @@ const Index = () => {
           </div>
 
           {/* Category Tabs */}
-          <div className="flex gap-2 overflow-x-auto pb-2">
-            {categories.map((category) => (
-              <Button
-                key={category}
-                variant={selectedCategory === category ? "default" : "outline"}
-                onClick={() => setSelectedCategory(category)}
-                className="whitespace-nowrap"
-              >
-                {category}
-              </Button>
-            ))}
+          <div className="space-y-3">
+            <div>
+              <p className="text-sm font-medium mb-2">Product Type</p>
+              <div className="flex gap-2 overflow-x-auto pb-2">
+                {categories.map((category) => (
+                  <Button
+                    key={category}
+                    variant={selectedCategory === category ? "default" : "outline"}
+                    onClick={() => setSelectedCategory(category)}
+                    className="whitespace-nowrap"
+                  >
+                    {category}
+                  </Button>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <p className="text-sm font-medium mb-2">Material</p>
+              <div className="flex gap-2 overflow-x-auto pb-2">
+                {materials.map((material) => (
+                  <Button
+                    key={material}
+                    variant={selectedMaterial === material ? "default" : "outline"}
+                    onClick={() => setSelectedMaterial(material)}
+                    className="whitespace-nowrap"
+                  >
+                    {material}
+                  </Button>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
 

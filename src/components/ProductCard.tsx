@@ -8,6 +8,7 @@ import { ShoppingCart, Heart } from "lucide-react";
 import { toast } from "sonner";
 import { Link } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { formatPriceFromUSD } from "@/lib/currency";
 
 interface ProductCardProps {
   product: ShopifyProduct;
@@ -124,7 +125,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
         </CardContent>
         <CardFooter className="p-4 pt-0 flex items-center justify-between gap-2">
           <span className="text-xl font-bold text-primary">
-            {currencyCode} ${price.toFixed(2)}
+            {formatPriceFromUSD(price)}
           </span>
           <Button 
             onClick={(e) => {

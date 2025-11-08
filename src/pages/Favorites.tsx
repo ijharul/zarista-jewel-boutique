@@ -7,8 +7,8 @@ import { useAuth } from "@/hooks/useAuth";
 import { ArrowLeft, Heart, ShoppingCart, Loader2 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
-import logoImage from "@/assets/zarista-logo.jpg";
 import { useCartStore } from "@/stores/cartStore";
+import { formatPriceFromUSD } from "@/lib/currency";
 
 const Favorites = () => {
   const { user, loading: authLoading } = useAuth();
@@ -58,6 +58,7 @@ const Favorites = () => {
           title: favorite.product_title,
           handle: favorite.product_handle,
           description: "",
+          productType: "",
           priceRange: {
             minVariantPrice: {
               amount: favorite.product_price,
@@ -103,8 +104,13 @@ const Favorites = () => {
       <div className="min-h-screen bg-background flex flex-col">
         <header className="border-b">
           <div className="container flex h-16 items-center justify-between">
-            <Link to="/">
-              <img src={logoImage} alt="Zarista" className="h-8 object-contain" />
+            <Link to="/" className="group flex items-center gap-2">
+              <div className="relative">
+                <span className="text-3xl font-serif font-bold bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent">
+                  Zarista
+                </span>
+                <div className="absolute -bottom-1 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-primary to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+              </div>
             </Link>
             <CartDrawer />
           </div>
@@ -127,8 +133,13 @@ const Favorites = () => {
     <div className="min-h-screen bg-background">
       <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container flex h-16 items-center justify-between">
-          <Link to="/">
-            <img src={logoImage} alt="Zarista" className="h-8 object-contain" />
+          <Link to="/" className="group flex items-center gap-2">
+            <div className="relative">
+              <span className="text-3xl font-serif font-bold bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent">
+                Zarista
+              </span>
+              <div className="absolute -bottom-1 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-primary to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+            </div>
           </Link>
           <CartDrawer />
         </div>
@@ -187,7 +198,7 @@ const Favorites = () => {
                       {favorite.product_title}
                     </h3>
                     <p className="text-xl font-bold text-primary">
-                      {favorite.product_currency} ${parseFloat(favorite.product_price).toFixed(2)}
+                      {formatPriceFromUSD(favorite.product_price)}
                     </p>
                   </div>
                 </CardContent>

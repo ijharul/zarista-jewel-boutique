@@ -9,6 +9,7 @@ import { ArrowLeft, ShoppingCart, Loader2, Heart } from "lucide-react";
 import { useCartStore } from "@/stores/cartStore";
 import { toast } from "sonner";
 import { useState } from "react";
+import { formatPriceFromUSD } from "@/lib/currency";
 
 const ProductDetail = () => {
   const { handle } = useParams();
@@ -161,7 +162,7 @@ const ProductDetail = () => {
                 {node.title}
               </h1>
               <p className="text-2xl font-bold text-primary">
-                {selectedVariant?.price.currencyCode} ${parseFloat(selectedVariant?.price.amount || '0').toFixed(2)}
+                {formatPriceFromUSD(selectedVariant?.price.amount || '0')}
               </p>
             </div>
 

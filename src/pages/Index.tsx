@@ -154,7 +154,9 @@ const Index = () => {
             <div className="flex-1 min-w-[200px]">
               <Select value={selectedCategory} onValueChange={setSelectedCategory}>
                 <SelectTrigger>
-                  <SelectValue placeholder="Product Type" />
+                  <SelectValue>
+                    {selectedCategory}
+                  </SelectValue>
                 </SelectTrigger>
                 <SelectContent>
                   {categories.map((category) => (
@@ -169,7 +171,9 @@ const Index = () => {
             <div className="flex-1 min-w-[200px]">
               <Select value={selectedMaterial} onValueChange={setSelectedMaterial}>
                 <SelectTrigger>
-                  <SelectValue placeholder="Material" />
+                  <SelectValue>
+                    {selectedMaterial}
+                  </SelectValue>
                 </SelectTrigger>
                 <SelectContent>
                   {materials.map((material) => (

@@ -5,6 +5,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { Heart, LogOut, User } from "lucide-react";
 import { toast } from "sonner";
+import logoImage from "@/assets/zarista-logo.png";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -28,12 +29,7 @@ export const Header = () => {
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 items-center justify-between">
         <Link to="/" className="group flex items-center gap-2">
-          <div className="relative">
-            <span className="text-3xl font-serif font-bold bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent">
-              Zarista
-            </span>
-            <div className="absolute -bottom-1 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-primary to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-          </div>
+          <img src={logoImage} alt="Zarista" className="h-12 w-auto" />
         </Link>
         
         <div className="flex items-center gap-2">

@@ -5,7 +5,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { Heart, LogOut, User } from "lucide-react";
 import { toast } from "sonner";
-import logoImage from "@/assets/zarista-logo.png";
+import logoImage from "@/assets/zarista-logo-new.png";
 import {
   DropdownMenu,
   DropdownMenuContent,

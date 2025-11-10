@@ -135,6 +135,32 @@ const Index = () => {
             />
             
             <div className="flex gap-2 items-center flex-wrap">
+              <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+                <SelectTrigger className="w-[180px]">
+                  <SelectValue placeholder="Category" />
+                </SelectTrigger>
+                <SelectContent>
+                  {categories.map((category) => (
+                    <SelectItem key={category} value={category}>
+                      {category}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+
+              <Select value={selectedMaterial} onValueChange={setSelectedMaterial}>
+                <SelectTrigger className="w-[180px]">
+                  <SelectValue placeholder="Material" />
+                </SelectTrigger>
+                <SelectContent>
+                  {materials.map((material) => (
+                    <SelectItem key={material} value={material}>
+                      {material}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+
               <Select value={sortBy} onValueChange={setSortBy}>
                 <SelectTrigger className="w-[180px]">
                   <SelectValue placeholder="Sort by" />
@@ -149,42 +175,6 @@ const Index = () => {
             </div>
           </div>
 
-          {/* Category and Material Filters */}
-          <div className="flex gap-4 flex-wrap">
-            <div className="flex-1 min-w-[200px]">
-              <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-                <SelectTrigger>
-                  <SelectValue>
-                    {selectedCategory}
-                  </SelectValue>
-                </SelectTrigger>
-                <SelectContent>
-                  {categories.map((category) => (
-                    <SelectItem key={category} value={category}>
-                      {category}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className="flex-1 min-w-[200px]">
-              <Select value={selectedMaterial} onValueChange={setSelectedMaterial}>
-                <SelectTrigger>
-                  <SelectValue>
-                    {selectedMaterial}
-                  </SelectValue>
-                </SelectTrigger>
-                <SelectContent>
-                  {materials.map((material) => (
-                    <SelectItem key={material} value={material}>
-                      {material}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
         </div>
 
         {isLoading && (

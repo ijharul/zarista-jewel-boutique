@@ -40,7 +40,7 @@ const Payments = () => {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-6">
+          <div className="max-w-2xl mx-auto">
             {/* UPI Payment Card */}
             <Card className="border-primary/20">
               <CardHeader>
@@ -95,37 +95,6 @@ const Payments = () => {
                     <li>Share with us via WhatsApp or Contact form</li>
                   </ol>
                 </div>
-              </CardContent>
-            </Card>
-
-            {/* Shopify Checkout Card */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Online Checkout</CardTitle>
-                <CardDescription>
-                  Add items to cart and checkout securely
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <p className="text-sm text-muted-foreground">
-                  You can also shop normally by adding items to your cart and completing checkout through our secure payment gateway.
-                </p>
-                
-                <div className="space-y-2">
-                  <h4 className="font-semibold text-sm">Accepted Payment Methods:</h4>
-                  <ul className="text-sm text-muted-foreground space-y-1 list-disc list-inside">
-                    <li>Credit/Debit Cards</li>
-                    <li>Net Banking</li>
-                    <li>UPI Apps</li>
-                    <li>Wallets</li>
-                  </ul>
-                </div>
-
-                <Button asChild className="w-full mt-4">
-                  <Link to="/">
-                    Continue Shopping
-                  </Link>
-                </Button>
               </CardContent>
             </Card>
           </div>

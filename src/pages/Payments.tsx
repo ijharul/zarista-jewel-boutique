@@ -40,7 +40,7 @@ const Payments = () => {
             </p>
           </div>
 
-          <div className="max-w-2xl mx-auto">
+          <div className="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto">
             {/* UPI Payment Card */}
             <Card className="border-primary/20">
               <CardHeader>
@@ -97,6 +97,63 @@ const Payments = () => {
                 </div>
               </CardContent>
             </Card>
+
+            {/* COD Payment Card */}
+            <Card className="border-primary/20">
+              <CardHeader>
+                <CardTitle>Cash on Delivery (COD)</CardTitle>
+                <CardDescription>
+                  Pay in cash when your order is delivered
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                {/* COD Icon/Illustration */}
+                <div className="flex justify-center py-8">
+                  <div className="bg-primary/10 rounded-full p-8">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-24 w-24 text-primary"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={1.5}
+                        d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"
+                      />
+                    </svg>
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  <div className="bg-secondary/50 p-4 rounded-lg">
+                    <p className="text-sm font-medium mb-2">Available for all locations</p>
+                    <p className="text-xs text-muted-foreground">
+                      Pay with cash at the time of delivery. No advance payment required.
+                    </p>
+                  </div>
+
+                  <div className="pt-4 border-t">
+                    <h4 className="font-semibold mb-2">How COD works:</h4>
+                    <ol className="text-sm text-muted-foreground space-y-1 list-decimal list-inside">
+                      <li>Browse and select your favorite jewelry</li>
+                      <li>Contact us with your order details</li>
+                      <li>We'll confirm your order and delivery date</li>
+                      <li>Pay in cash when the product is delivered</li>
+                      <li>Inspect the product before payment</li>
+                    </ol>
+                  </div>
+
+                  <Button asChild className="w-full" variant="outline">
+                    <Link to="/contact">
+                      Place COD Order
+                    </Link>
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
           </div>
 
           {/* Important Note */}
@@ -106,8 +163,8 @@ const Payments = () => {
             </CardHeader>
             <CardContent>
               <p className="text-sm text-muted-foreground">
-                After making a UPI payment, please contact us with your order details and payment confirmation. 
-                We will process your order once we verify the payment. For instant checkout, please use our regular shopping cart.
+                After making a UPI payment or placing a COD order, please contact us with your order details. 
+                We will process your order and confirm the delivery date. For any queries, feel free to reach out via WhatsApp or our contact form.
               </p>
             </CardContent>
           </Card>
